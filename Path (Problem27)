@@ -1,0 +1,47 @@
+
+--намиране на ..
+findTwoPoints::String -> Bool
+findTwoPoints l = findTwo l False
+findTwo :: String -> Bool -> Bool
+findTwo [xs] result = False
+findTwo (x:xs) result
+   |(head xs) == '.'  && (head (tail xs)) == '.' = True
+   |otherwise  = findTwo xs result 
+
+ --намиране на /// и т.н.
+isInterval:: String -> Bool
+isInterval l = is l True
+is :: String -> Bool -> Bool
+is "/" result = True
+is (x:xs) result 
+  | x /= '/' = False
+  | otherwise= is xs result
+
+-- изтрива интервала, ако следващия(съседния) елемент е интервал 
+removeInterval :: String ->String
+removeInterval l = removeInt l []
+removeInt :: String -> String ->String
+removeInt [] result = (reverse result)
+removeInt (x:xs) result
+  | x == '/' && (head xs) == '/' = removeInt xs result
+  | otherwise = removeInt xs (x : result) 
+ 
+-- премахване на точките и интералите ./
+removeIntervalPoint :: String ->String
+removeIntervalPoint l = removeIntPoint l []
+removeIntPoint :: String -> String ->String
+removeIntPoint [] result = (reverse result)
+removeIntPoint (x:xs) result
+  | x == '.' && (head xs) == '/' = removeIntPoint (tail xs) result
+  | otherwise = removeIntPoint xs (x : result) 
+   
+reduce_file_path :: String -> String
+reduce_file_path l
+    | findTwoPoints l = "/"   
+    | isInterval l = "/"
+	| (head (reverse l)) == '/' && (head (tail (reverse l))) == '.' = (reverse (tail (reverse (removeIntervalPoint l))))
+    | (head (reverse l)) == '/' = removeInterval (reverse (tail (reverse l))) 
+    | otherwise = (removeInterval l)
+
+	
+ 	
