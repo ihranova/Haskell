@@ -1,0 +1,64 @@
+nth :: Int -> [a] -> a
+nth n l = nth' n l (head l)
+nth' :: Int -> [a] -> a -> a
+nth' n l res
+  | n==0 = res
+  |otherwise = nth' (n-1) (tail  l) (head l)
+  
+--Връщаме ред по зададен индекс. 
+getRow :: Int -> [[a]] -> [a]
+getRow index l = nth index l
+
+-- Връщаме колона по зададен индекс.
+getCol :: Int -> [[a]] -> [a]
+getCol index l = map (\x ->  nth index x) l
+
+zipMap :: (a-> b -> c) -> [a] -> [b] -> [c]
+zipMap f (a:az) (b:bz) = f a b :zipMap f az bz
+zipMap f [] [] = []
+
+-- Връщаме главния диагонал на матрица
+diagonal :: [[a]] -> [a]
+diagonal l = zipMap (\index row -> nth index row) [1..length l] l
+
+
+--връщаме сумите на редовете, стълбовете и диагонала :)
+sumOfdiagonal ::(Num a) => [[a]] -> [a]
+sumOfdiagonal l =  [sum(diagonal l)]
+
+sumOfCol :: (Num a) =>  Int -> [[a]] -> a
+sumOfCol index l = sum (getCol index l)
+  
+sumOfRow :: (Num a) =>  Int -> [[a]] -> a
+sumOfRow index l = sum (getRow index l)  
+
+--връщаме всички суми от всеки ред и колона
+resultCol ::(Num a)=> [[a]] -> [a]
+resultCol l = map (\x -> sumOfCol x l) [1..length l]
+
+resultRow ::(Num a)=> [[a]] -> [a]
+resultRow l = map (\x -> sumOfRow x l) [1..length l]
+
+--връщаме списъка от всичките суми на редовете, стълбовете и диагонала
+magic:: (Num a) =>[[a]] -> [a]
+magic l =  (resultRow l) ++ (sumOfdiagonal l) ++ (resultRow l) 
+
+-- И ето резултата :)
+magic_square ::(Num a) => (Eq a) =>[[a]] -> Bool 
+magic_square l = magic1 (magic l) True
+magic1 ::(Num a) => (Eq a) =>[a] -> Bool ->Bool
+magic1 [xs] result = True
+magic1 (x:xs) result
+   | x /= (head xs) = False
+   | otherwise = magic1 xs result   
+
+   
+
+
+
+
+
+
+ 
+
+
