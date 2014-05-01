@@ -1,0 +1,38 @@
+isPrimeHelp:: Int -> Int
+isPrimeHelp n = isPrimeHelp1 n 1 0
+isPrimeHelp1::Int -> Int -> Int -> Int
+isPrimeHelp1 n start result
+  | start > n = result 
+  | n `mod` start == 0 = isPrimeHelp1 n (start + 1) (result + start)
+  | otherwise = isPrimeHelp1 n (start + 1) result  
+
+--проверява дали числото е просто  
+isPrime :: Int->Bool
+isPrime n = isPrimeHelp n == n + 1  
+
+--връща списъка от прости числа
+primeToList :: Int -> [Int] 
+primeToList n = help n 1 []
+help :: Int -> Int -> [Int] -> [Int]
+help n start result
+  | start > n = reverse (result)
+  | isPrime start = help n (start + 1)  (start:result)
+  | otherwise = help n (start + 1) result  
+
+goldhelp :: Int -> [(Int,Int)]
+goldhelp n = [(x,y) | x <- pr, y <- pr, x+y==n] 
+         where  pr = primeToList n  
+
+number :: Int -> Int
+number n = numberhelp (length (goldhelp n))
+numberhelp :: Int -> Int
+numberhelp n 
+   | n == 1 || n == 2 = 1   
+   | isPrime n =  (n `quot` 2 + 1)
+   | otherwise = n `quot` 2   
+   
+goldbach n = take (number n) (goldhelp n)
+                   
+                  		         
+		             
+ 
