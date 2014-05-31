@@ -39,7 +39,7 @@ reduce_file_path :: String -> String
 reduce_file_path l
     | findTwoPoints l = "/"   
     | isInterval l = "/"
-	| (head (reverse l)) == '/' && (head (tail (reverse l))) == '.' = (reverse (tail (reverse (removeIntervalPoint l))))
+    | (head (reverse l)) == '/' && (head (tail (reverse l))) == '.' = (reverse (tail (reverse (removeIntervalPoint l))))
     | (head (reverse l)) == '/' = removeInterval (reverse (tail (reverse l))) 
     | otherwise = (removeInterval l)
 
